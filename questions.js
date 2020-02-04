@@ -1,5 +1,5 @@
 /*
- * 12 JavaScript functions requiring functions, console.assert, selection, repetition,
+ * 11 JavaScript functions requiring functions, console.assert, selection, repetition,
  * strings, and arrays. The code contains a few asserts to shw the syntax.  You should add
  * many more asserts to tests. It is important to be able to write your own tests.
  */
@@ -95,8 +95,8 @@ function isStringSorted(str) {
     return true;
   }
   var pos = 0;
-  var curCharCode = str.charAt(pos).charCodeAt();
-  var nextCharCode = str.charAt(pos + 1).charCodeAt();
+  var curCharCode;
+  var nextCharCode;
   while (pos < str.length) {
     curCharCode = str.charAt(pos).charCodeAt();
     nextCharCode = str.charAt(pos + 1).charCodeAt();
@@ -252,7 +252,7 @@ function frequency(arr) {
         break;
     }
   }
-  console.log(retArr);
+  // console.log(retArr);
   return retArr;
 }
 
@@ -282,8 +282,36 @@ console.assert(2 == arr[10]); // There are two 10 of 10s
 // Precondition: numShifts > 0
 // Precondition: integerArray has integers onlt. We do not test for strings or floats.
 function shiftNTimes(integerArray, numShifts) {
-  // TODO: Complete this method.  Modify integerArray here, do not return anything.
+  while (numShifts) {
+    //Take first element off and push on the end
+    //while we stil have shifts left
+    var shiftedIndex = integerArray.shift();
+    integerArray.push(shiftedIndex);
+    numShifts--;
+  }
 }
+
+/* Tests; can't really use assert since there is no return value */
+var arr1, arr2, arr3, arr4, arr5;
+arr1 = [1, 2, 3, 4, 5, 6, 7];
+shiftNTimes(arr1, 3);
+console.log(arr1); //Should return [4, 5, 6, 7, 1, 2, 3]
+
+arr2 = [6, 2, 5, 3];
+shiftNTimes(arr2, 1);
+console.log(arr2); //Should return [2, 5, 3, 6]
+
+arr3 = [6, 2, 5, 3];
+shiftNTimes(arr3, 2);
+console.log(arr3); //Should return [5, 3, 6, 2]
+
+arr4 = [1, 2, 3];
+shiftNTimes(arr4, 5);
+console.log(arr4); //Should return [3, 1, 2]
+
+arr5 = [3];
+shiftNTimes(arr5, 3);
+console.log(arr5); //Should return [3]
 
 // 9) addToSet
 // Complete method addToSet(set, number) such that number is added
@@ -291,23 +319,24 @@ function shiftNTimes(integerArray, numShifts) {
 //
 // Precondition: each argument is alway a number.  No type mixing
 function addToSet(set, number) {
-  // TODO: Complete this method. Modify set here, do not return anything.
+  if (set !== null && set.includes(number) == false) {
+    set.push(number);
+  }
 }
-/*
+
 set = [];
-addToSet(set, 5)
-addToSet(set, 4)
-addToSet(set, 4)
-addToSet(set, 3)
-addToSet(set, 3)
-addToSet(set, 2)
-addToSet(set, 2)
+addToSet(set, 5);
+addToSet(set, 4);
+addToSet(set, 4);
+addToSet(set, 3);
+addToSet(set, 3);
+addToSet(set, 2);
+addToSet(set, 2);
 console.assert(5 == set[0]);
 console.assert(4 == set[1]);
 console.assert(3 == set[2]);
 console.assert(2 == set[3]);
 console.assert(4 == set.length);
-*/
 
 // 10)  Say that a "clump" in an array is a series of 2 or more adjacent elements of
 // the same value. Return the number of clumps in the given array.
@@ -318,11 +347,33 @@ console.assert(4 == set.length);
 //  countClumps( [ 1, 2, 3] ) returns 0
 //  countClumps( [ 2 ] returns 0
 function countClumps(arr) {
-  // TODO: Complete this function
-  return -999;
+  var clumpCount = 0;
+  var counter = 0;
+  var curElem = -1;
+  for (let elem of arr) {
+    console.log(`elem is ${elem}`);
+    console.log(`counter is ${counter}`);
+    console.log(`curElem is ${curElem}`);
+    if (elem != curElem) {
+      //Streak over, reset
+      console.log("Streak broken");
+      counter = 1;
+      curElem = elem;
+    } else {
+      //They are equal the clump continues
+      console.log("Matched and incremented counter");
+      counter++;
+    }
+  }
+  console.log(clumpCount);
+  return clumpCount;
 }
-// console.assert(0 == countClumps[ 1, 2, 3]);
-// console.assert(1 == countClumps[ 1, 2, 2, 2, 2, 3]);
+// console.assert(0 == countClumps([1, 2, 3]));
+// console.assert(1 == countClumps([1, 2, 2, 2, 2, 3]));
+//console.assert(2 == countClumps([1, 2, 2, 3, 4, 4]));
+// console.assert(1 == countClumps( [1, 1, 1, 1, 1 ] ) );
+// console.assert(0 == countClumps( [ 1, 2, 3] ));
+// console.assert(0 == [ 2 ] );
 
 // 11) evenOdd(array)
 //
@@ -337,12 +388,35 @@ function countClumps(arr) {
 //
 // Precondition: All array elements are integers, whole nmbers with no fractional part
 function evenOdd(array) {
-  // TODO: Complete this function
+  var temp = 0;
+  var leftPointer = array.length - 1;
+  var rightPointer = 0;
+  for(var i = 0; i<array.length; i++){
+    //If cur index is even...
+    if(array[i] % 2 ===0){
+        //Return if this is the only element
+        if( rightPointer > leftPointer){
+          return nums;
+        }else{
+          //Store the current
+          temp = array[rightPointer];
+          //Assign current pos to even value
+          array[rightPointer] = array[i];
+          //Assign temp to current loop position 
+          array[i] = temp;
+          //Move over position once swapped 
+          rightPointer++;
+        }
+
+    }
+  }
+  console.log(array);
+  return array;
 }
-/* // var array = [3, 2, 3, 2];
-// evenOdd(array);
-// console.assert(array[0] == 2);
-// console.assert(array[1] == 2);
-// console.assert(array[2] == 3);
-// console.assert(array[3] == 3);
-*/
+ var array = [3, 2, 3, 2];
+ evenOdd(array);
+ console.assert(array[0] == 2);
+ console.assert(array[1] == 2);
+ console.assert(array[2] == 3);
+ console.assert(array[3] == 3);
+
