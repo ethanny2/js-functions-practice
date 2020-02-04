@@ -1,6 +1,3 @@
-// You should see an error in Chrome's Console
-console.assert(4 == 8);
-
 /*
  * 12 JavaScript functions requiring functions, console.assert, selection, repetition,
  * strings, and arrays. The code contains a few asserts to shw the syntax.  You should add
@@ -18,18 +15,31 @@ console.assert(4 == 8);
 //
 // howSwedish("AbBa a b b a") returns 1
 // howSwedish("abbabba!") returns 2
+
 function howSwedish(str) {
-  // TODO: Complete this method
-  // Use str.length()
-  // Use + for concatenation
-  // Use var to declare variables
-  return 0;
+  var counter = 0;
+  const substr = "abba";
+  const formattedInput = str.toLowerCase();
+  //When you find "abba" move position to the next available "a" because it may be considered
+  // the start of a new "abba" substring.
+  const offSet = 2;
+  //Denotes start of the string
+  var position = 0;
+  while (formattedInput.indexOf(substr, position) != -1) {
+    //There was an abba found!
+    position = formattedInput.indexOf(substr, position) + offSet;
+    counter++;
+  }
+  return counter;
 }
 // The following asserts will fail until howSwedish is fixed
-// console.assert ( 0 == howSwedish ( 'no' ) );
-// console.assert ( 1 == howSwedish ( 'axxc AbBa Xx' ) );
+console.assert(0 == howSwedish("no"));
+console.assert(1 == howSwedish("axxc AbBa Xx"));
 console.assert(2 == howSwedish("abbabba"));
 // Add at more test cases
+console.assert(2 == howSwedish("abbabba!"));
+console.assert(1 == howSwedish("AbBa a b b a"));
+console.assert(4 == howSwedish("abBABBABBAF2434ABBa"));
 
 // 2)  mirrorEnds
 // Complete method mirrorEnds that given a string, looks for a mirror
@@ -44,11 +54,26 @@ console.assert(2 == howSwedish("abbabba"));
 // mirrorEnds("abca") "a"
 // mirrorEnds("abba") returns "abba"
 // mirrorEnds("abBa")); returns "a". This is case sensitive 'b' != 'B'
-//
+
 function mirrorEnds(str) {
-  // TODO: Complete this method
-  return "tba";
+  var retStr = "";
+  if (str.length === 1) return str;
+  for (var i = 0; i < str.length; i++) {
+    if (str.charAt(i) == str.charAt(str.length - 1 - i)) {
+      retStr += str.charAt(i);
+    } else {
+      break;
+    }
+  }
+  return retStr;
 }
+
+/*tests */
+console.assert("" == mirrorEnds(""));
+console.assert("" == mirrorEnds("abcde"));
+console.assert("a" == mirrorEnds("a"));
+console.assert("abba" == mirrorEnds("abba"));
+console.assert("a" == mirrorEnds("abBa"));
 
 // 3) isStringSorted
 // Given a String, return true if the letters are in ascending order.
@@ -58,11 +83,48 @@ function mirrorEnds(str) {
 // isStringSorted("abbcddef") returns true
 // isStringSorted("123456") returns true
 // isStringSorted("12321") returns false
-//
+//http://www.asciitable.com/
+/*
+    PUNCTUATION < NUMBERS < CAPITAL LETTERS < LOWERCASE LETTERS
+    in decimal values for ASCII characters
+*/
+
 function isStringSorted(str) {
-  // TODO: Complete this method
-  return !true;
+  /* "" and any single character is sorted*/
+  if (str.length < 2) {
+    return true;
+  }
+  var pos = 0;
+  var curCharCode = str.charAt(pos).charCodeAt();
+  var nextCharCode = str.charAt(pos + 1).charCodeAt();
+  while (pos < str.length) {
+    curCharCode = str.charAt(pos).charCodeAt();
+    nextCharCode = str.charAt(pos + 1).charCodeAt();
+    if (curCharCode > nextCharCode) {
+      //The current char is bigger than the next char.. not ascending
+      return false;
+    }
+    pos++;
+  }
+  return true;
+
+  //   for (var i = 0; i < str.length; i++) {
+  //     const curCharCode = str.charAt(i).charCodeAt();
+  //     const nextCharCode = str.charAt(i + 1).charCodeAt();
+  //     if (str.charAt(i).charCodeAt() < str.charAt(i + 1).charCodeAt()) {
+  //       //Its correctly sorted and we can continue
+  //     }
+  //   }
 }
+
+/* Tests */
+console.assert(true == isStringSorted(""));
+console.assert(true == isStringSorted("a"));
+console.assert(true == isStringSorted("abbcddef"));
+console.assert(true == isStringSorted("123456"));
+console.assert(false == isStringSorted("12321"));
+console.assert(false == isStringSorted("ab1"));
+console.assert(false == isStringSorted("ACZaD"));
 
 // 4) maxBlock
 // Given a string, return the length of the largest "block" in the string.
@@ -73,18 +135,48 @@ function isStringSorted(str) {
 // maxBlock("aA") returns 1  This is case sensitive 'a' != 'A'
 //
 function maxBlock(str) {
-  // TODO: Complete this method
-  return -999;
+  var curStreak = 0;
+  var largestStreak = 0;
+  var curWord = "";
+  for (var i = 0; i < str.length; i++) {
+    if (str.charAt(i) === curWord) {
+      curStreak++;
+    } else {
+      curWord = str.charAt(i);
+      curStreak = 1;
+    }
+    if (curStreak > largestStreak) {
+      largestStreak = curStreak;
+    }
+  }
+  return largestStreak;
 }
+/* Tests */
+console.assert(2 == maxBlock("hoopla"));
+console.assert(3 == maxBlock("abbCCCddBBBxx"));
+console.assert(0 == maxBlock(""));
+console.assert(1 == maxBlock("aA"));
+console.assert(3 == maxBlock("dddOOOohh"));
 
 // 5) isArraySorted
 // Given an array , return true if the element are in ascending order.
 // Note: 'abe' < 'ben' and 5 > 3
 // Precondition arr has all the same type of elements
 function isArraySorted(arr) {
-  // TODO: Complete this method
-  return !true;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] > arr[i + i]) {
+      //False no longer in ascending order
+      return false;
+    }
+  }
+  return true;
 }
+/* Tests */
+console.assert(true == isArraySorted(["aaa", "bbb", "ccc"]));
+console.assert(true == isArraySorted(["a", "b", "c"]));
+console.assert(true == isArraySorted(["abe", "ben"]));
+console.assert(false == isArraySorted([-1, 10, 0]));
+console.assert(true == isArraySorted([-1, 0, 10]));
 
 // 6) numberOfPairs
 // Return the number of times a pair occurs in array. A pair is any two String values that are equal (case
@@ -98,9 +190,21 @@ function isArraySorted(arr) {
 // numberOfPairs( ['a'] ) returns 0
 // Precondition: arr has all the same type of elements
 function numberOfPairs(arr) {
-  // TODO: Complete this method
-  return -999;
+  var pairCounter = 0;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] === arr[i + 1]) {
+      pairCounter++;
+    }
+  }
+  return pairCounter;
 }
+
+/* Tests */
+console.assert(0 == numberOfPairs(["a", "b", "c"]));
+console.assert(2 == numberOfPairs(["a", "a", "a"]));
+console.assert(0 == numberOfPairs([]));
+console.assert(0 == numberOfPairs(["a"]));
+console.assert(4 == numberOfPairs(["a", "c", "c", "r", "r", "a", "a", "a"]));
 
 // 7) frequency(array)
 // Given an  array of integers in the range of 0..10 (like quiz scores),
@@ -110,21 +214,58 @@ function numberOfPairs(arr) {
 //
 // Precondition: arr has valid ints in the range of 0..10
 function frequency(arr) {
-  // TODO: Complete this method
-  return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  var retArr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  for (let elem of arr) {
+    switch (elem) {
+      case 0:
+        retArr[0]++;
+        break;
+      case 1:
+        retArr[1]++;
+        break;
+      case 2:
+        retArr[2]++;
+        break;
+      case 3:
+        retArr[3]++;
+        break;
+      case 4:
+        retArr[4]++;
+        break;
+      case 5:
+        retArr[5]++;
+        break;
+      case 6:
+        retArr[6]++;
+        break;
+      case 7:
+        retArr[7]++;
+        break;
+      case 8:
+        retArr[8]++;
+        break;
+      case 9:
+        retArr[9]++;
+        break;
+      case 10:
+        retArr[10]++;
+        break;
+    }
+  }
+  console.log(retArr);
+  return retArr;
 }
 
 /* Feel free to use this as one test case for frequency.  If nothing else, these
    assertions hopefully help explain the expected return value.
-   
-arr = frequency([ 0, 3, 3, 8, 8, 8, 8, 10, 10 ]);
-console.assert(1 == arr[0]);  // There is one zero in arr
-console.assert(0 == arr[1]);  // There is no quiz score of 1/10 in arr
-console.assert(2 == arr[3]);  // There are two 3/10s in arr
-console.assert(4 == arr[8]);  // There are four 8/10s
-console.assert(0 == arr[9]);  // There is no quiz score of 9 in arr
-console.assert(2 == arr[10]); // There are two 10 of 10s
 */
+arr = frequency([0, 3, 3, 8, 8, 8, 8, 10, 10]);
+console.assert(1 == arr[0]); // There is one zero in arr
+console.assert(0 == arr[1]); // There is no quiz score of 1/10 in arr
+console.assert(2 == arr[3]); // There are two 3/10s in arr
+console.assert(4 == arr[8]); // There are four 8/10s
+console.assert(0 == arr[9]); // There is no quiz score of 9 in arr
+console.assert(2 == arr[10]); // There are two 10 of 10s
 
 // 8) shiftNTimes(array, numShifts)
 //
