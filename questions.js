@@ -391,32 +391,30 @@ function evenOdd(array) {
   var temp = 0;
   var leftPointer = array.length - 1;
   var rightPointer = 0;
-  for(var i = 0; i<array.length; i++){
+  for (var i = 0; i < array.length; i++) {
     //If cur index is even...
-    if(array[i] % 2 ===0){
-        //Return if this is the only element
-        if( rightPointer > leftPointer){
-          return nums;
-        }else{
-          //Store the current
-          temp = array[rightPointer];
-          //Assign current pos to even value
-          array[rightPointer] = array[i];
-          //Assign temp to current loop position 
-          array[i] = temp;
-          //Move over position once swapped 
-          rightPointer++;
-        }
-
+    if (array[i] % 2 === 0) {
+      //Return if this is the only element
+      if (rightPointer > leftPointer) {
+        return nums;
+      } else {
+        //Store the current
+        temp = array[rightPointer];
+        //Assign current pos to even value
+        array[rightPointer] = array[i];
+        //Assign temp to current loop position
+        array[i] = temp;
+        //Move over position once swapped
+        rightPointer++;
+      }
     }
   }
   console.log(array);
   return array;
 }
- var array = [3, 2, 3, 2];
- evenOdd(array);
- console.assert(array[0] == 2);
- console.assert(array[1] == 2);
- console.assert(array[2] == 3);
- console.assert(array[3] == 3);
-
+var array = [3, 2, 3, 2];
+evenOdd(array);
+console.assert(array[0] == 2);
+console.assert(array[1] == 2);
+console.assert(array[2] == 3);
+console.assert(array[3] == 3);
