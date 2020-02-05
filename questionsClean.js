@@ -295,7 +295,7 @@ console.assert(3 == set[2]);
 console.assert(2 == set[3]);
 console.assert(4 == set.length);
 
-/*TBD
+/*
   10) countClumps
   Say that a "clump" in an array is a series of 2 or more adjacent elements of
   the same value. Return the number of clumps in the given array.
@@ -310,30 +310,32 @@ function countClumps(arr) {
   var counter = 0;
   var curElem = -1;
   for (let elem of arr) {
-    console.log(`elem is ${elem}`);
-    console.log(`counter is ${counter}`);
-    console.log(`curElem is ${curElem}`);
     if (elem != curElem) {
+      if (counter >= 2) {
+        clumpCount++;
+      }
       //Streak over, reset
-      console.log("Streak broken");
       counter = 1;
       curElem = elem;
     } else {
       //They are equal the clump continues
-      console.log("Matched and incremented counter");
       counter++;
     }
   }
-  console.log(clumpCount);
+  // If last elem of array is same as current elem query the
+  // counter one more time.
+  if (counter >= 2 && curElem === arr[arr.length - 1]) {
+    clumpCount++;
+  }
   return clumpCount;
 }
 
-// console.assert(0 == countClumps([1, 2, 3]));
-// console.assert(1 == countClumps([1, 2, 2, 2, 2, 3]));
-//console.assert(2 == countClumps([1, 2, 2, 3, 4, 4]));
-// console.assert(1 == countClumps( [1, 1, 1, 1, 1 ] ) );
-// console.assert(0 == countClumps( [ 1, 2, 3] ));
-// console.assert(0 == [ 2 ] );
+console.assert(0 == countClumps([1, 2, 3]));
+console.assert(1 == countClumps([1, 2, 2, 2, 2, 3]));
+console.assert(2 == countClumps([1, 2, 2, 3, 4, 4]));
+console.assert(1 == countClumps( [1, 1, 1, 1, 1 ] ) );
+console.assert(0 == countClumps( [ 1, 2, 3] ));
+console.assert(0 == countClumps([2]));
 
 /*
   11) evenOdd(array)
